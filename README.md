@@ -1,11 +1,17 @@
 # CropUtils
-对ucrop的封装工具类,让其使用更加快捷
+对ucrop的封装工具类,让其使用更加快捷.
+
+在ucrop 2.1.2(compile 'com.yalantis:ucrop:2.1.2')基础上封装,
+
+如果以后ucrop以后升级,那么本工具类只需要改CropConfig里字段就可以.其他透明.
+
+甚至,切换其他图片裁剪框架,也是改方法内部实现即可,不用更换各处已调用的api.
+
+
 
 
 
 [uCrop主项目地址](https://github.com/Yalantis/uCrop)
-
-
 
 
 
@@ -35,6 +41,8 @@ public interface CropHandler {
 
 # 使用
 
+
+
 点击选择图片或拍照的地方调用pickxxx
 
 
@@ -49,3 +57,10 @@ public interface CropHandler {
 
 tag字段用于同一个页面多个地方接收裁剪图片的区分,如无需要,不必设置.
 
+
+
+# 相关
+
+[本工具类介绍blog地址](http://blog.csdn.net/hss01248/article/details/52124075)
+
+[图片加载框架Fresco的封装工具类FrescoUtils](https://github.com/glassLake/FrescoUtlis)
