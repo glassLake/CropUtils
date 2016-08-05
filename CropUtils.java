@@ -3,9 +3,11 @@ package com.yalantis.ucrop.sample;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ public class CropUtils {
     private static final String EXTRA_VIEW_TAG = "viewTag";//同一个页面多个地方需要选择图片时，config里tag字段用于标识
 
     public static final  int TYPE_AVATAR  = 1;
-    public static final  int TYPE_NORMAL  = 1;
+    public static final  int TYPE_NORMAL  = 2;
 
     public static Uri getUri() {
         return uri;
@@ -69,11 +71,18 @@ public class CropUtils {
 
     public static void pickFromGallery(Activity context,CropConfig config,int type) {
         if (config != null){
-            CropUtils.config = config;//怎么避免前后两次
+            CropUtils.config = config;//怎么避免前后两次config
+        }else {
+            CropUtils.config = new CropConfig();
         }
 
         setType(type);
-        pickFromGallery(context);
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        context.startActivityForResult(Intent.createChooser(intent, "选择图片"), REQUEST_SELECT_PICTURE);
     }
 
     private static void setType(int type) {
@@ -95,27 +104,27 @@ public class CropUtils {
     }
 
     public static void pickFromCamera(Activity context,CropConfig config,int type) {
-        if (config != null)
-        CropUtils.config = config;
+        if (config != null){
+            CropUtils.config = config;
+        }else {
+            CropUtils.config = new CropConfig();
+        }
+
         setType(type);
 
-        pickFromCamera(context);
-    }
-
-    public static void pickFromGallery(Activity context) {
-
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        context.startActivityForResult(Intent.createChooser(intent, "选择图片"), REQUEST_SELECT_PICTURE);
-    }
-
-    public static void pickFromCamera(Activity context) {
         Uri mDestinationUri = buildUri();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 .putExtra(MediaStore.EXTRA_OUTPUT, mDestinationUri);
         context.startActivityForResult(intent, REQUEST_CAMERA);
+    }
+
+    public static void pickFromGallery(Activity context) {
+
+        pickFromGallery(context,null,0);
+    }
+
+    public static void pickFromCamera(Activity context) {
+       pickFromCamera(context,null,0);
     }
 
     /**
@@ -141,7 +150,6 @@ public class CropUtils {
 
                 Uri finalUri = UCrop.getOutput(data);
                 cropHandler.handleCropResult(finalUri,config.tag);
-                config = new CropConfig();//参数重置
 
             } else if (requestCode == REQUEST_CAMERA) {//第一次，拍照后返回，因为设置了MediaStore.EXTRA_OUTPUT，所以data为null，数据直接就在uri中
                 startCropActivity(context, uri);
@@ -149,7 +157,6 @@ public class CropUtils {
         }
         if (resultCode == UCrop.RESULT_ERROR) {
             cropHandler.handleCropError(data);
-            config = new CropConfig();//参数重置
         }
 
     }
@@ -170,6 +177,9 @@ public class CropUtils {
         options.setShowCropGrid(config.showGridLine);
         options.setHideBottomControls(config.hideBottomControls);
         options.setShowCropFrame(config.showOutLine);
+		 options.setToolbarColor(config.toolbarColor);
+        options.setStatusBarColor(config.statusBarColor);
+
         uCrop.withOptions(options);
 
         uCrop.start(context);
@@ -213,6 +223,9 @@ public class CropUtils {
         public boolean showGridLine = true;//内部网格
         public boolean showOutLine = true;//最外面的矩形线
 
+        public @ColorInt int toolbarColor =  Color.BLUE;
+        public @ColorInt int statusBarColor =  Color.BLUE;
+
 
         public void setAspectRation(int x,int y){
             this.aspectRatioX = x;
@@ -229,7 +242,7 @@ public class CropUtils {
 
 
     public interface CropHandler {
-         void handleCropResult(Uri uri,int tag);
+         void handleCropResult(Uri uri, int tag);
         void handleCropError(Intent data);
     }
 }

@@ -9,11 +9,23 @@
 
 
 
-
-
 [uCrop主项目地址](https://github.com/Yalantis/uCrop)
 
 
+
+# 效果图
+
+## 通用裁剪界面
+
+
+
+ ![normalCrop](normalCrop.png)
+
+
+
+## 头像裁剪框
+
+ ![avatarcrop](avatarcrop.png)
 
 # 封装的api
 
