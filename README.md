@@ -1,3 +1,7 @@
+
+# Deprecated
+此库不再维护,新库地址请看:[ https://github.com/hss01248/PicCrop](https://github.com/hss01248/PicCrop)
+
 # CropUtils
 对ucrop的封装工具类,让其使用更加快捷.
 
