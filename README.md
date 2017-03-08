@@ -1,4 +1,11 @@
 
+
+## 注: 图片选择/拍照->裁剪->压缩 整个流程的操作已经串起到下面的库中
+[PhotoOut](https://github.com/hss01248/PhotoOut)
+
+
+
+
 # Deprecated
 此库不再维护,新库地址请看:[ https://github.com/hss01248/PicCrop](https://github.com/hss01248/PicCrop)
 
